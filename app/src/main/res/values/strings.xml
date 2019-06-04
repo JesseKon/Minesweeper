@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Minesweeper</string>
+    <string name="title_activity_game" translatable="false">game</string>
+
+    <string name="new_game">New game</string>
+    <string name="high_score">High score</string>
+    <string name="audio_on">Audio on</string>
+    <string name="audio_off">Audio off</string>
+</resources>
