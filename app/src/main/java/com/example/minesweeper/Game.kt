@@ -1,13 +1,24 @@
+/*
+ TODO: First location should never be a bomb
+ TODO: Open surrounding locations where there is 0 bombs around
+ TODO: Save best times
+ */
+
 package com.example.minesweeper
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_game.*
+import java.util.*
 import kotlin.random.Random
 
 class Game : AppCompatActivity() {
@@ -16,7 +27,14 @@ class Game : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        // Create timer
+        val timer = findViewById<Chronometer>(R.id.timer)
+
+        // Start game and timer
         startGame()
+        timer.start()
+
     }
 
     /* ******************************************* */
@@ -27,7 +45,10 @@ class Game : AppCompatActivity() {
         val gridHeight = 10
         val numOfBombs = 10
 
-        // Init array
+        var numOfLocationsOpened = 0
+        val numOfLocationsToOpenForTheWin = gridWidth * gridHeight - numOfBombs
+
+        // Create and init bomb array
         var bombLocations = arrayOf<Array<Int>>()
         for (y in 0..(gridHeight - 1)) {
             var array = arrayOf<Int>()
@@ -37,16 +58,27 @@ class Game : AppCompatActivity() {
             bombLocations += array
         }
 
+        // Create and init array of opened locations
+        var locationsOpened = arrayOf<Array<Int>>()
+        for (y in 0..(gridHeight - 1)) {
+            var array = arrayOf<Int>()
+            for (x in 0..(gridWidth - 1)) {
+                array += 0
+            }
+            locationsOpened += array
+        }
+
         // Randomize bomb locations
         var bombsPlanted = 0
         while (bombsPlanted < numOfBombs) {
-            val randomIndexY = Random.nextInt(0, gridHeight - 1)
-            val randomIndexX = Random.nextInt(0, gridWidth - 1)
-            if (bombLocations[randomIndexY][randomIndexX] == 0) {
-                bombLocations[randomIndexY][randomIndexX] = 666
+            val rndPosY = Random.nextInt(0, gridHeight - 1)
+            val rndPosX = Random.nextInt(0, gridWidth - 1)
+            if (bombLocations[rndPosY][rndPosX] == 0) {
+                bombLocations[rndPosY][rndPosX] = 666
                 ++bombsPlanted
             }
         }
+
 
         // Calculate screen width in pixels
         val displayMetrics = DisplayMetrics()
@@ -85,6 +117,17 @@ class Game : AppCompatActivity() {
                     if (bombLocations[posY][posX] == 666) {
                         button.text = "PUM"
                         button.setBackgroundColor(0x33ff0000)
+
+                        Thread.sleep(1000)
+
+                        // Go to game over
+                        val message = "Game lost!"
+                        val intent = Intent(this, GameOver::class.java).apply {
+                            putExtra("MSG", message)
+                            putExtra("WAS_GAME_WON", false)
+                            putExtra("TIMER", timer.text.toString())
+                        }
+                        startActivity(intent)
                     }
 
                     // How many bombs around?
@@ -133,6 +176,22 @@ class Game : AppCompatActivity() {
 
                         button.text = numOfBombsAround.toString()
                         button.setBackgroundColor(0x3300ff00)
+
+                        if (locationsOpened[posY][posX] == 0) {
+                            locationsOpened[posY][posX] = 1
+                            ++numOfLocationsOpened
+
+                            // Was the game won?
+                            if (numOfLocationsOpened >= numOfLocationsToOpenForTheWin) {
+                                val message = "Game won!"
+                                val intent = Intent(this, GameOver::class.java).apply {
+                                    putExtra("MSG", message)
+                                    putExtra("WAS_GAME_WON", true)
+                                    putExtra("TIMER", timer.text.toString())
+                                }
+                                startActivity(intent)
+                            }
+                        }
                     }
                 }
 
