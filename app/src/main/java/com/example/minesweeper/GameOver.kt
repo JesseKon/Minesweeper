@@ -3,8 +3,11 @@ package com.example.minesweeper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import com.example.minesweeper.Highscoredata
+import kotlinx.android.synthetic.main.activity_game.*
 
 class GameOver : AppCompatActivity() {
 
@@ -19,11 +22,24 @@ class GameOver : AppCompatActivity() {
         val timeView = findViewById<TextView>(R.id.message)
         val message = intent.getStringExtra("MSG")
         val wasGameWon = intent.getBooleanExtra("WAS_GAME_WON", false)
-        val time = intent.getStringExtra("TIMER")
+        val timerString = intent.getStringExtra("TIMER_STRING")
+        val timerLong = intent.getLongExtra("TIMER_INT", 0)
         textView.text = message
 
+        Log.e("Timer", timerLong.toString())
+
         if (wasGameWon)
-            timeView.text = "Time: " + time
+            timeView.text = "Time: " + timerString
+
+        val scoresTxt = findViewById<TextView>(R.id.scores)
+        val scoresObj = Highscoredata()
+        val scores = scoresObj.get(this)
+        var output: String = ""
+        for (score in scores) {
+            output += score.toString() + "\n"
+        }
+        scoresTxt.text = output
+
     }
 
     fun backToMainMenu(view: View) {

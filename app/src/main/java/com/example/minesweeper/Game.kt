@@ -9,6 +9,7 @@ package com.example.minesweeper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.ViewGroup
@@ -125,7 +126,7 @@ class Game : AppCompatActivity() {
                         val intent = Intent(this, GameOver::class.java).apply {
                             putExtra("MSG", message)
                             putExtra("WAS_GAME_WON", false)
-                            putExtra("TIMER", timer.text.toString())
+                            putExtra("TIMER_STRING", timer.text.toString())
                         }
                         startActivity(intent)
                     }
@@ -184,10 +185,12 @@ class Game : AppCompatActivity() {
                             // Was the game won?
                             if (numOfLocationsOpened >= numOfLocationsToOpenForTheWin) {
                                 val message = "Game won!"
+                                val timeItTook = SystemClock.elapsedRealtime() - timer.base
                                 val intent = Intent(this, GameOver::class.java).apply {
                                     putExtra("MSG", message)
                                     putExtra("WAS_GAME_WON", true)
-                                    putExtra("TIMER", timer.text.toString())
+                                    putExtra("TIMER_STRING", timer.text.toString())
+                                    putExtra("TIMER_INT", timeItTook)
                                 }
                                 startActivity(intent)
                             }
