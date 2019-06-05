@@ -22,6 +22,7 @@ class Game : AppCompatActivity() {
     /* ******************************************* */
     private fun startGame() {
 
+        // Constants
         val gridWidth = 10
         val gridHeight = 10
         val numOfBombs = 10
