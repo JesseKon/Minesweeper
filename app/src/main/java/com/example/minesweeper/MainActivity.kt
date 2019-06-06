@@ -16,4 +16,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Game::class.java)
         startActivity(intent)
     }
+
+    fun highScores(view: View) {
+        val intent = Intent(this, Highscores::class.java)
+        startActivity(intent)
+    }
 }

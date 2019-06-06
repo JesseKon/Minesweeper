@@ -3,6 +3,6 @@
     <string name="app_name">Miinaharava</string>
     <string name="audio_off">Äänet pois</string>
     <string name="audio_on">Äänet päällä</string>
-    <string name="high_score">Huipputulokset</string>
+    <string name="high_score">Parhaat tulokset</string>
     <string name="new_game">Uusi peli</string>
 </resources>

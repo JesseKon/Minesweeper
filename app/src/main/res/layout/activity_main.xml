@@ -28,6 +28,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="20sp"
             android:text="@string/high_score"
+            android:onClick="highScores"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

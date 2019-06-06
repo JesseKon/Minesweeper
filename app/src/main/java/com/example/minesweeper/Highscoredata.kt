@@ -8,7 +8,7 @@ class Highscoredata {
     val PREFS_NAME = "MinesweeperHighScores"
 
     fun set(context: Context, score: Long) {
-        val highScores = Array<Long>(6)
+        val highScores = Array<Long>(6, { 0 })
         val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         highScores[0] = prefs.getLong("1", 999)
